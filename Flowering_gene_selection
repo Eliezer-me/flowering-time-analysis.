@@ -1,4 +1,4 @@
-# Flowering Gene  Selection in Chamaecrista fasciculata.
+# Flowering Gene  Selection in Chamaecrista fasciculata
 
 This repository documents a reproducible, conservative, and biologically grounded pipeline for identifying putative orthologous genes in Chamaecrista fasciculata using reciprocal best hit (RBH) comparisons against Arabidopsis thaliana and Glycine max (soybean), and for integrating these orthologs with selective sweep signals detected using SweeD. It also contains PCA analyses of Chamaecrista populations (by state and by latitude), a US map showing sample coverage, and space reserved for figures.
 
