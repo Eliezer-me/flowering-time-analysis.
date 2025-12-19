@@ -6,7 +6,7 @@ The workflow was developed through iterative analysis, validation, and debugging
 
 - Evolutionary genomics
 - Functional gene annotation in non-model species
-- Detecting flowering-time genes under recent positive selection
+- Detecting flowering-time genes under recent positive selection. 
 
 ---
 
@@ -347,7 +347,7 @@ ggplot(us_map, aes(x = long, y = lat, group = group)) +
   theme_minimal(base_size = 11) +
   labs(
        subtitle = "At least one sample",
-       fill = "Samples used")
+       fill = "Samples used")http://127.0.0.1:9327/chunk_output/1/20E39104/ck8ddw80cm4s7/000058.png 
 ```
 
 Map note:
