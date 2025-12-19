@@ -395,7 +395,6 @@ ggplot(us_map, aes(x = long, y = lat, group = group)) +
        fill = "Samples used")
 ```
 <img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/c4a22e8c-5969-432a-9124-50b6617aeb33" />
-<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/93a0b3e7-4f2f-4935-bde7-0454fe04f706" />
 
 ```r
 library(ggplot2)
@@ -427,6 +426,7 @@ ggplot() +
   coord_fixed(1.3) +
   theme_minimal(base_size = 11) 
 ```
+<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/93a0b3e7-4f2f-4935-bde7-0454fe04f706" />
 
 
 Map note:
