@@ -395,18 +395,20 @@ ggplot(us_map, aes(x = long, y = lat, group = group)) +
        fill = "Samples used")
 ```
 <img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/c4a22e8c-5969-432a-9124-50b6617aeb33" />
+<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/93a0b3e7-4f2f-4935-bde7-0454fe04f706" />
+
 ```r
 library(ggplot2)
 library(dplyr)
 library(maps)
 library(viridis)
 
-# 1. Load PCA and metadata ===
+# 1. Load PCA and metadata
 pca_raw <- read.table("learning/chamaecrista_allStates_PCA0.5.eigenvec", header = FALSE)
 colnames(pca_raw) <- c("FamilyID", "IndividualID", paste0("PC", 1:10))
 pca_raw$State <- substr(pca_raw$FamilyID, 1, 2)
 
-# 2. Load environmental data (assumed to have Latitude, Longitude) ===
+# 2. Load environmental data (assumed to have Latitude, Longitude) 
 env <- read.table("learning/chamae_BioClim.tsv", header = TRUE, sep = "\t")
 df <- left_join(pca_raw, env, by = c("IndividualID" = "IID"))  # Adjust join key if needed
 
@@ -424,10 +426,8 @@ ggplot() +
   scale_color_viridis(option = "C", name = "PC1 Score") +
   coord_fixed(1.3) +
   theme_minimal(base_size = 11) 
-
-
 ```
-<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/93a0b3e7-4f2f-4935-bde7-0454fe04f706" />
+
 
 Map note:
 - The map highlights U.S. states with at least one sampled individual in our dataset. It is intended as a quick visual summary of geographic sampling coverage and should be complemented with point maps (latitude/longitude) for precise sample locations and with overlays of environmental gradients when relevant.
