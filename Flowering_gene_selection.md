@@ -396,26 +396,24 @@ ggplot(us_map, aes(x = long, y = lat, group = group)) +
 ```
 <img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/c4a22e8c-5969-432a-9124-50b6617aeb33" />
 ```r
-
-
 library(ggplot2)
 library(dplyr)
 library(maps)
 library(viridis)
 
-# === 1. Load PCA and metadata ===
+# 1. Load PCA and metadata ===
 pca_raw <- read.table("learning/chamaecrista_allStates_PCA0.5.eigenvec", header = FALSE)
 colnames(pca_raw) <- c("FamilyID", "IndividualID", paste0("PC", 1:10))
 pca_raw$State <- substr(pca_raw$FamilyID, 1, 2)
 
-# === 2. Load environmental data (assumed to have Latitude, Longitude) ===
+# 2. Load environmental data (assumed to have Latitude, Longitude) ===
 env <- read.table("learning/chamae_BioClim.tsv", header = TRUE, sep = "\t")
 df <- left_join(pca_raw, env, by = c("IndividualID" = "IID"))  # Adjust join key if needed
 
-# === 3. Filter complete cases with coordinates ===
+#3. Filter complete cases with coordinates
 df_geo <- df %>% filter(!is.na(Latitude), !is.na(Longitude))
 
-# === 4. Plot PC1 on US map ===
+# 4. Plot PC1 on US map 
 us_map <- map_data("state")
 
 ggplot() +
