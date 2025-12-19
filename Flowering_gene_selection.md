@@ -164,6 +164,7 @@ threshold <- quantile(sweed_all$Likelihood, 0.90, na.rm = TRUE)
 ```
 
 Map sweeps to gene models (GFF3) using GenomicRanges and keep the maximum CLR per gene:
+<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/05828bfd-ea55-4827-a28f-691a13999b3f" />
 
 ```r
 library(GenomicRanges)
@@ -241,7 +242,50 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = State)) +
     y = "PC2",
     color = "State"
   )
+<img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/2c953332-370c-4087-bc06-799e20e735ec" />
 ```
+#scree plot to show what percentage each Pca contributes to the variations
+```r
+library(ggplot2)
+
+# Load eigenvalues
+eigenvals <- scan("learning/chamaecrista_pca.eigenval")
+
+# Calculate proportions and cumulative variance
+prop_var <- eigenvals / sum(eigenvals)
+cum_var <- cumsum(prop_var)
+pc_labels <- paste0("PC", 1:length(eigenvals))
+
+# Create data frame
+df <- data.frame(
+  PC = factor(pc_labels, levels = pc_labels),
+  Variance = prop_var,
+  Cumulative = cum_var
+)
+
+# Scree plot with cumulative line and elbow annotation
+ggplot(df, aes(x = PC)) +
+  geom_bar(aes(y = Variance), stat = "identity", fill = "#377eb8", alpha = 0.8) +
+  geom_line(aes(y = Cumulative), group = 1, color = "#e41a1c", size = 1.2) +
+  geom_point(aes(y = Cumulative), color = "#e41a1c", size = 2) +
+  geom_text(aes(y = Cumulative, label = paste0(round(Cumulative * 100, 1), "%")),
+            vjust = -0.5, size = 3.5, fontface = "bold") +
+  geom_vline(xintercept = 4.5, linetype = "dashed", color = "gray40") +  # elbow around PC4
+  annotate("text", x = 4.5, y = 0.8, label = "Elbow", angle = 90, vjust = -0.5, color = "purple") +
+  labs(
+    title = "Scree Plot",
+    x = "Principal Component",
+    y = "Variance"
+    
+  ) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+```
+<img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/47b56479-fa4b-4ba3-a655-8415f656b340" />
 
 PCA colored by Latitude:
 
@@ -284,6 +328,7 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = Latitude)) +
     color = "Latitude"
   )
 ```
+<img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/0a5a7710-2f1c-43c9-a3ec-f61be318e20f" />
 
 Notes from PCA:
 - Populations cluster partly by state and latitude, consistent with regional adaptation and photoperiod differences.
@@ -347,8 +392,44 @@ ggplot(us_map, aes(x = long, y = lat, group = group)) +
   theme_minimal(base_size = 11) +
   labs(
        subtitle = "At least one sample",
-       fill = "Samples used")http://127.0.0.1:9327/chunk_output/1/20E39104/ck8ddw80cm4s7/000058.png 
+       fill = "Samples used")
 ```
+<img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/c4a22e8c-5969-432a-9124-50b6617aeb33" />
+```r
+
+
+library(ggplot2)
+library(dplyr)
+library(maps)
+library(viridis)
+
+# === 1. Load PCA and metadata ===
+pca_raw <- read.table("learning/chamaecrista_allStates_PCA0.5.eigenvec", header = FALSE)
+colnames(pca_raw) <- c("FamilyID", "IndividualID", paste0("PC", 1:10))
+pca_raw$State <- substr(pca_raw$FamilyID, 1, 2)
+
+# === 2. Load environmental data (assumed to have Latitude, Longitude) ===
+env <- read.table("learning/chamae_BioClim.tsv", header = TRUE, sep = "\t")
+df <- left_join(pca_raw, env, by = c("IndividualID" = "IID"))  # Adjust join key if needed
+
+# === 3. Filter complete cases with coordinates ===
+df_geo <- df %>% filter(!is.na(Latitude), !is.na(Longitude))
+
+# === 4. Plot PC1 on US map ===
+us_map <- map_data("state")
+
+ggplot() +
+  geom_polygon(data = us_map, aes(x = long, y = lat, group = group),
+               fill = "gray90", color = "white") +
+  geom_point(data = df_geo, aes(x = Longitude, y = Latitude, color = PC1),
+             size = 3, alpha = 0.8) +
+  scale_color_viridis(option = "C", name = "PC1 Score") +
+  coord_fixed(1.3) +
+  theme_minimal(base_size = 11) 
+
+
+```
+<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/93a0b3e7-4f2f-4935-bde7-0454fe04f706" />
 
 Map note:
 - The map highlights U.S. states with at least one sampled individual in our dataset. It is intended as a quick visual summary of geographic sampling coverage and should be complemented with point maps (latitude/longitude) for precise sample locations and with overlays of environmental gradients when relevant.
