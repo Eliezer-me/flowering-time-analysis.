@@ -164,7 +164,6 @@ threshold <- quantile(sweed_all$Likelihood, 0.90, na.rm = TRUE)
 ```
 
 Map sweeps to gene models (GFF3) using GenomicRanges and keep the maximum CLR per gene:
-<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/05828bfd-ea55-4827-a28f-691a13999b3f" />
 
 ```r
 library(GenomicRanges)
@@ -194,6 +193,7 @@ max_likelihood_by_gene <- overlap_info %>%
   summarise(Max_Likelihood = max(Likelihood, na.rm = TRUE))
 
 ```
+<img width="1259" height="778" alt="image" src="https://github.com/user-attachments/assets/05828bfd-ea55-4827-a28f-691a13999b3f" />
 
 Key fix: if multiple sweep positions overlap the same gene, assign only the maximum CLR value to that gene.
 
@@ -242,9 +242,11 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = State)) +
     y = "PC2",
     color = "State"
   )
-<img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/2c953332-370c-4087-bc06-799e20e735ec" />
 ```
-#scree plot to show what percentage each Pca contributes to the variations
+<img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/2c953332-370c-4087-bc06-799e20e735ec" />
+
+#scree plot to show what percentage each Pca contributes to the variations.
+
 ```r
 library(ggplot2)
 
@@ -262,7 +264,6 @@ df <- data.frame(
   Variance = prop_var,
   Cumulative = cum_var
 )
-
 # Scree plot with cumulative line and elbow annotation
 ggplot(df, aes(x = PC)) +
   geom_bar(aes(y = Variance), stat = "identity", fill = "#377eb8", alpha = 0.8) +
@@ -281,9 +282,6 @@ ggplot(df, aes(x = PC)) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   theme_minimal(base_size = 11) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-
 ```
 <img width="1400" height="865" alt="image" src="https://github.com/user-attachments/assets/47b56479-fa4b-4ba3-a655-8415f656b340" />
 
